@@ -1,32 +1,27 @@
-from sqlalchemy import create_engine
-from sqlalchemy.sql import text
-from fastapi import FastAPI
-import os
+import threading
 import time
+from fastapi import FastAPI
 
+from src.database.connection import DB
 from src.router import router
+from src.routers.card import card_router
+from src.routers.transaction import transaction_router
+from src.routers.user import user_router
+from src.worker.worker import worker
+
+while True:
+    db_engine = DB.connect_to_database()
+    if db_engine:
+        break
+    time.sleep(5)
 
 app = FastAPI()
 
 app.include_router(router)
+app.include_router(user_router, prefix="/api/v1/user")
+app.include_router(card_router, prefix="/api/v1/card")
+app.include_router(transaction_router, prefix="/api/v1/transaction")
 
-
-def connect_to_database():
-    try:
-        engine = create_engine(os.getenv("MYSQL_URL", "mysql://guardian:guardian@mysql:3306/guardian"), echo=True)
-
-        with engine.connect() as conn:
-            result = conn.execute(text("SELECT 1"))
-            row = result.fetchone()
-            if row[0] == 1:
-                return engine
-    except Exception as e:
-        print(f"Error connecting to the database: {e}")
-        return None
-
-
-while True:
-    db_engine = connect_to_database()
-    if db_engine:
-        break
-    time.sleep(5)
+worker_thread = threading.Thread(target=worker)
+worker_thread.daemon = True
+worker_thread.start()

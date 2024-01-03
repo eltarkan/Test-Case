@@ -9,9 +9,11 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    tty: true
     environment:
       FLASK_ENV: development
       MYSQL_URL: mysql://guardian:guardian@db:3306/guardian
+      JWT_SECRET_KEY: guardian
 
   db:
     image: mysql:8.2.0
