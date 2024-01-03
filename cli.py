@@ -26,13 +26,13 @@ def create_migration(name):
 
 
 @click.command()
-def run_migrations():
-    click.echo(f"Running migrations")
-    os.system(f"alembic upgrade head")
+def migrate():
+    click.echo("Running migrations 🧌")
+    os.system("alembic upgrade head")
 
 
 if __name__ == "__main__":
     cli.add_command(start_server)
     cli.add_command(create_migration)
-    cli.add_command(run_migrations)
+    cli.add_command(migrate)
     cli()

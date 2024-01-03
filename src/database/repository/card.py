@@ -52,6 +52,18 @@ def get_user_card_by_card_no(card_no, user_id):
         return None
 
 
+def get_user_active_card_by_card_no(card_no, user_id):
+    session = DB.get_session()()
+    try:
+        card = session.query(Card).join(Card.users).filter(User.id == user_id, Card.card_no == card_no, Card.date_deleted == None, Card.status == "ACTIVE").first()
+        session.close()
+        return card
+    except Exception as e:
+        session.close()
+        print(e)
+        return None
+
+
 def delete_user_card_with_card_no(card_no, user_id):
     session = DB.get_session()()
     try:

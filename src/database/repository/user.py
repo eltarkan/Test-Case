@@ -22,8 +22,10 @@ def create_user(email: str, password: str):
             _relation.card = _new_card
             session.add(_relation)
             session.commit()
+            session.close()
         return _user
     except Exception as e:
         session.rollback()
+        session.close()
         print(e)
         return e

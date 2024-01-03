@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardian-api
+  labels:
+    team: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guardian-api
+  template:
+    metadata:
+      labels:
+        app: guardian-api
+    spec:
+      containers:
+        - image: tarkan0110/guardian-api
+          env:
+            - name: MYSQL_URL
+              value: 'mysql://guardian:guardian@127.0.0.1:3306/guardian'
+            - name: JWT_SECRET_KEY
+              value: 'guardian'
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "1000m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          name: guardian-api
+        - image: mysql:8.2.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: 'guardian'
+            - name: MYSQL_DATABASE
+              value: 'guardian'
+            - name: MYSQL_USER
+              value: 'guardian'
+            - name: MYSQL_PASSWORD
+              value: 'guardian'
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "1000m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          name: guardian-db
+      imagePullSecrets:
+        - name: tarkansecret
