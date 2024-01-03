@@ -10,6 +10,7 @@
 Bu problemi provision ya da RabbitMQ ile çözmenin sağlıklı olacağını düşünüyorum ama bu case'de
 RabbitMQ kullanmama sebebim cloud native bir geliştirme planladım ve takvimin gerisine düşmemek için vazgeçtim.
 - Postman collection dosyasını ekledim.
+- https://guardian.tarkancengiz.com kendi GCloud'umda yayına aldım. Postman collection dosyasındaki url'leri değiştirerek test edebilirsiniz.
 
 ## ARCHITECTURE
 
